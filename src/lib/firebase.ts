@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, type Unsubscribe as AuthUnsubscribe, type User, } from 'firebase/auth';
 import { doc, getFirestore, onSnapshot, type Unsubscribe as SnapshotUnsubscribe } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { derived, readable } from 'svelte/store';
+import { derived, readable, type Readable } from 'svelte/store';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBdiZbLpr83GR5KshPDzl0PicBXCW77-7U",
@@ -71,7 +71,7 @@ interface UserData {
   links: any[];
 }
 
-export const userData = derived(user, ($user, set) => {
+export const userData: Readable<UserData | null> = derived(user, ($user, set) => {
   if ($user) {
     return docStore<UserData>(`users/${$user.uid}`).subscribe(set);
   } else {
