@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { auth, user } from "$lib/firebase";
 
   import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
