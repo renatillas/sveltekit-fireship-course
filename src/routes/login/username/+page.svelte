@@ -60,9 +60,13 @@
 
 <AuthCheck>
   <h2>Username</h2>
-  <form class="w-2/5" on:submit|preventDefault={confirmUsername}>
+  <form
+    class="w-full"
+    on:submit|preventDefault={confirmUsername}
+    autocomplete="off"
+  >
     <input
-      class="input w-full"
+      class="input w-full max-w-xs"
       class:input-error={!isValid && isTouched}
       class:input-warning={isTaken}
       class:input-success={isAvailable && isValid && !isLoading}
@@ -74,7 +78,7 @@
     <div class="my-4 min-h-16 px-8 w-full">
       {#if isLoading}
         <p class="text-secondary">
-          Checking availability of username @{username}
+          Checking availability of username {username}
         </p>
       {/if}
       {#if !isValid && isTouched}
@@ -84,12 +88,12 @@
       {/if}
       {#if isValid && !isAvailable && !isLoading}
         <p class="text-warning text-sm">
-          @{username} is not available :(
+          {username} is not available :(
         </p>
       {/if}
 
       {#if isAvailable && isTouched && isValid}
-        <button class="btn btn-success">Confirm username @{username}</button>
+        <button class="btn btn-success">Confirm {username}</button>
       {/if}
     </div>
   </form>

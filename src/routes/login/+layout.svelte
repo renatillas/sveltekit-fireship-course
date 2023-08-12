@@ -26,7 +26,7 @@
 </nav>
 
 <AnimatedRoute>
-  <main class="card bg-neutral w-2/3 mx-auto text-neutral-content">
+  <main class="card bg-neutral w-5/6 mx-auto text-neutral-content">
     <div class="card-body items-center text-center">
       <slot />
     </div>
