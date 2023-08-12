@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, type User, } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { writable } from 'svelte/store';
+import { readable } from 'svelte/store';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBdiZbLpr83GR5KshPDzl0PicBXCW77-7U",
@@ -27,11 +27,11 @@ function userStore() {
 
   if (!auth || !globalThis.window) {
     console.warn("Firebase auth unavailable or not in browser.")
-    const { subscribe } = writable<User | null>(null);
+    const { subscribe } = readable<User | null>(null);
     return { subscribe };
   }
 
-  const { subscribe } = writable(auth?.currentUser ?? null, (set) => {
+  const { subscribe } = readable(auth?.currentUser ?? null, (set) => {
     unsubscribe = onAuthStateChanged(auth, (user) => {
       set(user)
     });
