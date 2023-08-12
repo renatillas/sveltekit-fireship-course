@@ -1,37 +1,32 @@
 <script lang="ts">
   import AuthCheck from "$lib/components/AuthCheck.svelte";
   import { db } from "$lib/firebase";
+  import { debounce } from "$lib/utils";
   import { doc, getDoc } from "firebase/firestore";
 
   let username = "";
   let isAvailable = false;
   let isLoading = true;
 
-  type Milliseconds = number;
-  const debounce_duration: Milliseconds = 500;
-  let debounce: NodeJS.Timeout;
-
-  async function checkUsernameAvailability() {
-    console.log("check availability dispatched", username);
-    clearTimeout(debounce);
-    isAvailable = false;
+  async function checkUsernameAvailability(): Promise<void> {
     if (!username) return;
 
+    console.log("checking availability of ", username);
+
+    isAvailable = false;
     isLoading = true;
 
-    debounce = setTimeout(async () => {
-      console.log("checking availability of ", username);
+    const docRef = doc(db, "usernames", username);
+    const exists = await getDoc(docRef).then((doc) => doc.exists());
 
-      const docRef = doc(db, "usernames", username);
-      const exists = await getDoc(docRef).then((doc) => doc.exists());
-
-      isAvailable = !exists;
-      isLoading = false;
-    }, debounce_duration);
+    isAvailable = !exists;
+    isLoading = false;
   }
 
+  let debouncedCheck = debounce(checkUsernameAvailability, 500);
+
   async function confirmUsername() {
-    console.log("username confirmed", username);
+    console.log("confirming username", username);
   }
 </script>
 
@@ -43,7 +38,7 @@
       type="text"
       placeholder="Username"
       bind:value={username}
-      on:input={checkUsernameAvailability}
+      on:input={debouncedCheck}
     />
 
     <p>Is username available? {isAvailable ? "Yes" : "No"}</p>
