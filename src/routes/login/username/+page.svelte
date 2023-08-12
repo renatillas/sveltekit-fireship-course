@@ -6,24 +6,24 @@
 
   let username = "";
   let isAvailable = false;
-  let isLoading = true;
+  let isLoading = false;
 
-  async function checkUsernameAvailability(): Promise<void> {
+
+  const debouncedRemoteCheck = debounce(async () => {
+    const docRef = doc(db, "usernames", username);
+    const exists = await getDoc(docRef).then((doc) => doc.exists());
+    isAvailable = !exists;
+    isLoading = false;
+  }, 500);
+
+  let checkUsername = () => {
     if (!username) return;
-
     console.log("checking availability of ", username);
 
     isAvailable = false;
     isLoading = true;
-
-    const docRef = doc(db, "usernames", username);
-    const exists = await getDoc(docRef).then((doc) => doc.exists());
-
-    isAvailable = !exists;
-    isLoading = false;
-  }
-
-  let debouncedCheck = debounce(checkUsernameAvailability, 500);
+    debouncedRemoteCheck();
+  };
 
   async function confirmUsername() {
     console.log("confirming username", username);
@@ -61,7 +61,7 @@
       type="text"
       placeholder="Username"
       bind:value={username}
-      on:input={debouncedCheck}
+      on:input={checkUsername}
     />
 
     <p>Is username available? {isAvailable ? "Yes" : "No"}</p>
