@@ -64,11 +64,12 @@
 <AuthCheck>
   {#if $userData?.username}
     <p class="card-title">
-      Your username is <span class="text-accent font-bold"
-        >{$userData.username}</span
-      >
+      Your username is <span class="text-accent">{$userData.username}</span>
     </p>
     <p class="text-sm">(Usernames cannot be changed)</p>
+    <div class="card-actions">
+      <a class="btn btn-primary" href="photo">Upload profile image</a>
+    </div>
   {:else}
     <form
       class="w-full"
