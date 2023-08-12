@@ -1,1 +1,7 @@
-<h2>Username</h2>
+<script>
+  import AuthCheck from "$lib/components/AuthCheck.svelte";
+</script>
+
+<AuthCheck>
+  <h2>Username</h2>
+</AuthCheck>
