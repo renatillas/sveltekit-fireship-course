@@ -9,10 +9,13 @@
   let isLoading = false;
 
   const re = /^(?=[a-zA-Z0-9._]{3,16}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
-  $: isValid =
-    username?.length >= 3 && username?.length <= 15 && re.test(username);
+  $: isValid = isUsernameValid(username);
   $: isTouched = username.length > 0;
   $: isTaken = isValid && !isAvailable && !isLoading;
+
+  function isUsernameValid(username: string): boolean {
+    return username?.length >= 3 && username?.length <= 15 && re.test(username);
+  }
 
   const debouncedRemoteCheck = debounce(async () => {
     const docRef = doc(db, "usernames", username);
@@ -22,7 +25,7 @@
   }, 500);
 
   let checkUsername = () => {
-    if (!username) return;
+    if (!username || !isUsernameValid(username)) return;
     console.log("checking availability of ", username);
 
     isAvailable = false;
