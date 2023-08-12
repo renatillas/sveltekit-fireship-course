@@ -1,8 +1,8 @@
 <script lang="ts">
   import AuthCheck from "$lib/components/AuthCheck.svelte";
-  import { db } from "$lib/firebase";
+  import { db, user } from "$lib/firebase";
   import { debounce } from "$lib/utils";
-  import { doc, getDoc } from "firebase/firestore";
+  import { doc, getDoc, writeBatch } from "firebase/firestore";
 
   let username = "";
   let isAvailable = false;
@@ -27,6 +27,29 @@
 
   async function confirmUsername() {
     console.log("confirming username", username);
+    const batch = writeBatch(db);
+
+    console.log($user!.uid);
+
+    batch.set(doc(db, "usernames", username), { uid: $user!.uid });
+    batch.set(doc(db, "users", $user!.uid), {
+      username,
+      photoURL: $user!.photoURL ?? null,
+      published: true,
+      bio: "Test bio",
+      links: [
+        {
+          title: "Title Link",
+          url: "https://www.google.com",
+          icon: "custom",
+        },
+      ],
+    });
+
+    await batch.commit();
+
+    username = "";
+    isAvailable = false;
   }
 </script>
 
