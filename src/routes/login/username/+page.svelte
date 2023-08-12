@@ -8,6 +8,11 @@
   let isAvailable = false;
   let isLoading = false;
 
+  const re = /^(?=[a-zA-Z0-9._]{3,16}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
+  $: isValid =
+    username?.length >= 3 && username?.length <= 15 && re.test(username);
+  $: isTouched = username.length > 0;
+  $: isTaken = isValid && !isAvailable && !isLoading;
 
   const debouncedRemoteCheck = debounce(async () => {
     const docRef = doc(db, "usernames", username);
@@ -58,14 +63,34 @@
   <form class="w-2/5" on:submit|preventDefault={confirmUsername}>
     <input
       class="input w-full"
+      class:input-error={!isValid && isTouched}
+      class:input-warning={isTaken}
+      class:input-success={isAvailable && isValid && !isLoading}
       type="text"
       placeholder="Username"
       bind:value={username}
       on:input={checkUsername}
     />
+    <div class="my-4 min-h-16 px-8 w-full">
+      {#if isLoading}
+        <p class="text-secondary">
+          Checking availability of username @{username}
+        </p>
+      {/if}
+      {#if !isValid && isTouched}
+        <p class="text-error text-sm">
+          must be 3-15 characters long, alphanumerical only
+        </p>
+      {/if}
+      {#if isValid && !isAvailable && !isLoading}
+        <p class="text-warning text-sm">
+          @{username} is not available :(
+        </p>
+      {/if}
 
-    <p>Is username available? {isAvailable ? "Yes" : "No"}</p>
-
-    <button class="btn btn-success">Confirm username @{username}</button>
+      {#if isAvailable && isTouched && isValid}
+        <button class="btn btn-success">Confirm username @{username}</button>
+      {/if}
+    </div>
   </form>
 </AuthCheck>
