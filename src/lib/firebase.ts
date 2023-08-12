@@ -1,8 +1,8 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, type Unsubscribe as AuthUnsubscribe, type User, } from 'firebase/auth';
+import { doc, getFirestore, onSnapshot, type Unsubscribe as SnapshotUnsubscribe } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { readable } from 'svelte/store';
+import { derived, readable } from 'svelte/store';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBdiZbLpr83GR5KshPDzl0PicBXCW77-7U",
@@ -42,3 +42,39 @@ function userStore() {
 }
 
 export const user = userStore();
+
+
+export function docStore<T>(path: string) {
+  let unsubscribe: SnapshotUnsubscribe;
+
+  const docRef = doc(db, path);
+
+  const { subscribe } = readable<T | null>(null, (set) => {
+    unsubscribe = onSnapshot(docRef, snapshot => {
+      set(snapshot.data() as T ?? null);
+    })
+
+    return () => unsubscribe();
+  });
+
+  return {
+    subscribe,
+    ref: docRef,
+    id: docRef.id,
+  }
+}
+
+interface UserData {
+  username: string;
+  bio: string;
+  photoURL: string;
+  links: any[];
+}
+
+export const userData = derived(user, ($user, set) => {
+  if ($user) {
+    return docStore<UserData>(`users/${$user.uid}`).subscribe(set);
+  } else {
+    set(null);
+  }
+})
