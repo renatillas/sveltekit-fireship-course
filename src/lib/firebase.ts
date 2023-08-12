@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, onAuthStateChanged, type User, } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged, type Unsubscribe as AuthUnsubscribe, type User, } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 import { readable } from 'svelte/store';
 
@@ -23,7 +23,7 @@ export const storage = getStorage()
   * @returns a store with the current firebase user
   */
 function userStore() {
-  let unsubscribe: () => void;
+  let unsubscribe: AuthUnsubscribe;
 
   if (!auth || !globalThis.window) {
     console.warn("Firebase auth unavailable or not in browser.")
@@ -31,14 +31,14 @@ function userStore() {
     return { subscribe };
   }
 
-  const { subscribe } = readable(auth?.currentUser ?? null, (set) => {
+  const { subscribe } = readable<User | null>(auth?.currentUser ?? null, (set) => {
     unsubscribe = onAuthStateChanged(auth, (user) => {
       set(user)
     });
     return () => unsubscribe();
   });
 
-  return { subscribe, };
+  return { subscribe };
 }
 
 export const user = userStore();
