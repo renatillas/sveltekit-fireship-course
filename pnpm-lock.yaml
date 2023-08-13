@@ -8,6 +8,9 @@ dependencies:
   firebase:
     specifier: ^10.1.0
     version: 10.1.0(react-native@0.72.3)
+  svelte-gestures:
+    specifier: ^1.5.2
+    version: 1.5.2
 
 devDependencies:
   '@sveltejs/adapter-auto':
@@ -5755,6 +5758,10 @@ packages:
       - stylus
       - sugarss
     dev: true
+
+  /svelte-gestures@1.5.2:
+    resolution: {integrity: sha512-bXGFqpNAAYCM4XsxjaHMAoPQC3IRjrgGS+Sm/pE1ZftYu9gGRWvDF8g6cwl2b751R2kN1SwNEd6XV7zVh9mcew==}
+    dev: false
 
   /svelte-hmr@0.15.3(svelte@4.2.0):
     resolution: {integrity: sha512-41snaPswvSf8TJUhlkoJBekRrABDXDMdpNpT2tfHIv4JuhgvHqLMhEPGtaQn0BmbNSTkuz2Ed20DF2eHw0SmBQ==}
