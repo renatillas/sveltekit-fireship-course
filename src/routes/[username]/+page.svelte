@@ -1,4 +1,5 @@
 <script lang="ts">
+  import UserLink from "$lib/components/UserLink.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -18,6 +19,9 @@
 
   <ul class="list-none">
     {#each data.links as link}
-      <p />{/each}
+      <li>
+        <UserLink {...link} />
+      </li>
+    {/each}
   </ul>
 </main>
