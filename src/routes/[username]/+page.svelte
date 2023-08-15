@@ -13,13 +13,16 @@
 <main class="prose text-center mx-auto mt-8">
   <h1 class="text-5xl text-primary my-8">@{data.username}</h1>
 
-  <img class="mx-auto" src={data.photoURL} alt="PhotoURL" width="256" />
+  <img
+    class="mx-auto h-52 object-cover"
+    src={data.photoURL}
+    alt="PhotoURL"
+    width="256"
+  />
 
-  <p class="text-xl my-8">{data.bio}</p>
-
-  <ul class="list-none">
+  <ul class="list-none my-8">
     {#each data.links as link}
-      <li>
+      <li class="my-2">
         <UserLink {...link} />
       </li>
     {/each}
