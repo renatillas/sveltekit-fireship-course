@@ -68,7 +68,7 @@
     </p>
     <p class="text-sm">(Usernames cannot be changed)</p>
     <div class="card-actions">
-      <a class="btn btn-primary" href="photo">Upload profile image</a>
+      <a class="btn btn-primary" href="photo">Next</a>
     </div>
   {:else}
     <form
