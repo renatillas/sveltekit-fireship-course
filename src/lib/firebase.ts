@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, onAuthStateChanged, type Unsubscribe as AuthUnsubscribe, type User, } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, type Unsubscribe as AuthUnsubscribe, type User, signInWithPopup, GoogleAuthProvider, } from 'firebase/auth';
 import { doc, getFirestore, onSnapshot, type Unsubscribe as SnapshotUnsubscribe } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { derived, readable, type Readable } from 'svelte/store';
@@ -17,6 +17,12 @@ export const app = initializeApp(firebaseConfig)
 export const db = getFirestore()
 export const auth = getAuth()
 export const storage = getStorage()
+
+export async function signInWithGoogle() {
+  const provider = new GoogleAuthProvider();
+  await signInWithPopup(auth, provider);
+}
+
 
 /**
   * @description Svelte store for the current user
