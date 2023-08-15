@@ -8,8 +8,8 @@ export const load = (async ({ params }) => {
 
   const q = query(collectionRef, where("username", "==", params.username), limit(1))
   const snapshot = await getDocs(q);
-  const exists = snapshot.docs[0].exists();
-  const data = snapshot.docs[0].data();
+  const exists = snapshot.docs[0]?.exists();
+  const data = snapshot.docs[0]?.data();
 
   if (!exists) throw error(404, "User not found");
   if (!data.published) throw error(403, "This profile is not public");
