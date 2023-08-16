@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { auth, signInWithGoogle, userData } from "$lib/firebase";
+  import { auth, userData } from "$lib/firebase";
   import { signOut } from "firebase/auth";
 
   let searchUsername: string = "";
@@ -49,12 +49,6 @@
             >
           </li>
         {:else}
-          <li>
-            <button
-              class="btn btn-primary btn-sm mt-4"
-              on:click={() => signInWithGoogle()}>Login</button
-            >
-          </li>
           <li>
             <a class="btn btn-warning btn-sm mt-4" href="/login">Sign up</a>
           </li>
